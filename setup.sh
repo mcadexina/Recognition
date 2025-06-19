@@ -1,9 +1,12 @@
 #!/bin/bash
+set -e
 
-# Upgrade pip
+echo "Upgrading pip..."
 pip install --upgrade pip
 
-# Install dependencies with specific version constraints
-pip install tensorflow==2.9.3
-pip install keras==2.9.0
+echo "Installing tensorflow-cpu and keras..."
+pip install tensorflow-cpu==2.12.0
+pip install keras==2.12.0
+
+echo "Installing other dependencies..."
 pip install -r requirements.txt
