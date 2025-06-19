@@ -35,5 +35,11 @@ events.out.tfevents.*
 *.bak
 
 # Keep empty directories
-**/*/
-!**/*/.gitkeep
+# Make sure module directories are included
+!models/
+!utils/
+!models/**/*
+!utils/**/*
+
+# Don't ignore __init__.py files
+!**/__init__.py
