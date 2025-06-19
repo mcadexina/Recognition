@@ -16,6 +16,9 @@ build/
 # VS Code settings
 .vscode/
 
+# Streamlit settings - don't ignore
+# .streamlit/
+
 # User uploaded files
 uploads/*
 !uploads/.gitkeep
