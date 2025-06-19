@@ -8,6 +8,13 @@ font = "sans serif"
 [server]
 enableCORS = false
 enableXsrfProtection = true
+maxUploadSize = 200
 
 [browser]
 gatherUsageStats = false
+
+[runner]
+fastReruns = true
+
+[deprecation]
+showfileUploaderEncoding = false
