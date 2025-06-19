@@ -3,6 +3,12 @@ import os
 import importlib
 import sys
 
+# Add the current directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
+    print(f"Added {current_dir} to Python path")
+
 # Try to import TensorFlow
 try:
     import tensorflow as tf
@@ -30,10 +36,44 @@ except Exception as e:
     print(f"Dependency import error: {str(e)}")
     st.error(f"Dependency import error: {str(e)}")
 
+# Show details about environment
+st.title("Iris Recognition System")
+st.write(f"Python version: {sys.version}")
+st.write(f"Current directory: {current_dir}")
+st.write("Checking module availability...")
+
+# Check if modules are available
+module_paths = {
+    "utils": os.path.join(current_dir, "utils"),
+    "models": os.path.join(current_dir, "models")
+}
+
+for module_name, module_path in module_paths.items():
+    if os.path.exists(module_path):
+        st.success(f"✅ Module directory '{module_name}' found at {module_path}")
+    else:
+        st.error(f"❌ Module directory '{module_name}' not found at {module_path}")
+
+# List files in current directory for debugging
+st.write("Files in current directory:")
+st.code('\n'.join(os.listdir(current_dir)))
+
 # Main application imports
 print("Importing main application...")
-try:
-    # Import our modules
+try:    # Import our modules
+    print("Checking utils path:", os.path.join(current_dir, "utils"))
+    print("Files in directory:", os.listdir(current_dir))
+    
+    # Check if utils/models directories exist
+    if not os.path.exists(os.path.join(current_dir, "utils")) or not os.path.exists(os.path.join(current_dir, "models")):
+        st.warning("Utils or models directories not found! Switching to fallback mode.")
+        raise ImportError("Required module directories not found")
+        
+    # Import utility functions directly
+    sys.path.insert(0, os.path.join(current_dir, "utils"))
+    sys.path.insert(0, os.path.join(current_dir, "models"))
+    
+    # Try direct imports
     from utils.preprocessing import preprocess_image, extract_iris_region
     from models.cnn_model import load_cnn_model, extract_features, predict_class
     from models.gabor_model import extract_features as gabor_features
@@ -80,6 +120,17 @@ try:
         
 except Exception as e:
     print(f"Application import error: {str(e)}")
-    st.title("Iris Recognition System")
-    st.error(f"Error loading application: {str(e)}")
-    st.info("This may be due to compatibility issues with the current Python environment. Please check the logs for more information.")
+    st.warning(f"Error loading main application: {str(e)}")
+    st.info("Loading fallback application...")
+    
+    try:
+        # Try to load the fallback app instead
+        if os.path.exists(os.path.join(current_dir, "fallback_app.py")):
+            import fallback_app
+            fallback_app.main()
+        else:
+            st.error("Fallback application not found!")
+            st.info("This may be due to compatibility issues with the current Python environment. Please check the logs for more information.")
+    except Exception as fallback_error:
+        st.error(f"Error loading fallback application: {str(fallback_error)}")
+        st.info("Please contact support for assistance.")
