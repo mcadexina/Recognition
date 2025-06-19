@@ -156,4 +156,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📧 Contact
 
-For questions or feedback, please contact: your@email.com
+For questions or feedback, please contact: adex2010online@gmail.com or +2348145349459
